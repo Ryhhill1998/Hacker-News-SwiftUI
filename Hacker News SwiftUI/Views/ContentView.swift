@@ -13,28 +13,29 @@ struct ContentView: View {
     
     init() {
         //Use this if NavigationBarTitle is with Large Font
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(red: 0.31, green: 0.85, blue: 0.56, alpha: 1.00)]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(red: 0.15, green: 0.62, blue: 0.42, alpha: 1.00)]
 
         //Use this if NavigationBarTitle is with displayMode = .inline
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(red: 0.31, green: 0.62, blue: 0.24, alpha: 1.00)]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(red: 0.15, green: 0.62, blue: 0.42, alpha: 1.00)]
     }
     
     var body: some View {
         NavigationView {
             ZStack {
-                Color(.black).edgesIgnoringSafeArea(.all)
+                Color(.white).edgesIgnoringSafeArea(.all)
                 
                 List(networkManager.posts) { post in
                     NavigationLink(destination: DetailView(url: post.url)) {
                         HStack {
                             Text(String(post.points))
-                                .frame(width: 50.0)
+                                .frame(width: 50.0).fontWeight(.bold)
                             Text(post.title)
                         }
-                    }.listRowBackground(Color.blue)
+                    }.listRowBackground(Color(hue: 0.159, saturation: 0.003, brightness: 0.928))
                 }
                 .scrollContentBackground(.hidden)
                 .navigationTitle("Hacker News")
+                .foregroundColor(Color.black)
             }
         }
         .onAppear {
