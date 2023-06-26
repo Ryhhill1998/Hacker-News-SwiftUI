@@ -7,10 +7,12 @@
 
 import Foundation
 
-class NetworkManager {
+class NetworkManager: ObservableObject {
+    
+    @Published var posts = [Post]()
     
     func fetchData() {
-        guard let url = URL(string: "http://hn.algolia.com/api/v1/search?tags=front_page") else { return }
+        guard let url = URL(string: "https://hn.algolia.com/api/v1/search?tags=front_page") else { return }
         
         let session = URLSession(configuration: .default)
         
@@ -21,19 +23,26 @@ class NetworkManager {
             }
             
             guard let safeData = data else { return }
-            let decoder = JSONDecoder()
+            guard let results = self.parseData(for: safeData) else { return }
             
-            do {
-                let decodedData = try decoder.decode(Results.self, from: safeData)
-                let hits = decodedData.hits
-                print(hits[0].title)
-                print(hits[0].points)
-                print(hits[0].url)
-            } catch {
-                print(error)
+            DispatchQueue.main.async {
+                self.posts = results.hits
             }
         }
         
         task.resume()
+    }
+    
+    func parseData(for data: Data) -> Results? {
+        var results: Results?
+        let decoder = JSONDecoder()
+        
+        do {
+            results = try decoder.decode(Results.self, from: data)
+        } catch {
+            print(error)
+        }
+        
+        return results
     }
 }

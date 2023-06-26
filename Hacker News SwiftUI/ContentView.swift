@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @ObservedObject var networkManager = NetworkManager()
+    
     var body: some View {
         NavigationView {
-            List(posts) { post in
+            List(networkManager.posts) { post in
                 return Text(post.title)
             }
             .navigationTitle("Hacker News")
+        }
+        .onAppear {
+            self.networkManager.fetchData()
         }
     }
 }
